@@ -82,12 +82,17 @@ def memoize(f=None, max_size: int = None, cache_exceptions: bool = False, arg_ha
             :param kwargs: keyword-args to the func
             """
             # Generate key
-            key = (self._arg_hash_func(args))
-            if kwargs:
-                key += (object())
-                for k, v in kwargs.items():
-                    key += (self._arg_hash_func(k))
-                    key += (self._arg_hash_func(v))
+            # key = (self._arg_hash_func(args))
+            # if kwargs:
+            #     key += (object())
+            #     for k, v in kwargs.items():
+            #         key += (self._arg_hash_func(k))
+            #         key += (self._arg_hash_func(v))
+            bound_args = inspect.signature(self._f).bind(*args, **kwargs)
+            key = ""
+            for k, v in bound_args.arguments.items():
+                key += str((self._arg_hash_func(k)))
+                key += str((self._arg_hash_func(v)))
             key = hash(key)
             # Fetch from cache or call callable
             if key in self._cache:
