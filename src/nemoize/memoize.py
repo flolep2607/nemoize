@@ -88,7 +88,7 @@ def memoize(f=None, max_size: int = None, cache_exceptions: bool = False, arg_ha
             #     for k, v in kwargs.items():
             #         key += (self._arg_hash_func(k))
             #         key += (self._arg_hash_func(v))
-            bound_args = inspect.signature(self._f).bind(*args, **kwargs)
+            bound_args = inspect.signature(self._f).bind_partial(*args, **kwargs)
             key = ""
             for k, v in bound_args.arguments.items():
                 key += str((self._arg_hash_func(k)))
